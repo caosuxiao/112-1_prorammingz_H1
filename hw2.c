@@ -40,7 +40,7 @@ int YesOrNo(int board[8][8], int dx, int dy){
         x += dx, y += dy, n++;
     }
     if(flag == 0){
-        board[_x+n*dx][_y+n*dy] == 0;
+        board[_x+n*dx][_y+n*dy] == 0;   //WTF??? this is for what???
         return 0;
     }   //出界
     else if((board[x][y] == 0)) return 0;   //沒被包夾
@@ -60,5 +60,5 @@ void main(){
     scanf("%d%d%d", &_x, &_y, &_chess);    //靠阿 要記得在變數前加'&', and % 和% 之間不需要逗號...
     if(isEmpty(board))
         direction(board);
-    else printf("color%d was occupied here!\n", board[_x][_y]);
+    else printf("color%d occupied here!\n", board[_x][_y]);
 }
