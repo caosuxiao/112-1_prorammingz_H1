@@ -42,7 +42,7 @@ void PrintBoard(int board[8][8]){
     }   
 }
 void main(){
-    printf("======================This is a program that flip the board once. w ======================\n");
+    printf("======================This is a program that flips the board once. w ======================\n");
     int board[8][8] = {0}, x, y ,chess;
     // int x, y ,chess;
     // int board[8][8] = {{1, 0, 1, 0, 0, 0, 0, 0},
