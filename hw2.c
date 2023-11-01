@@ -54,7 +54,7 @@ void main(){
     printf("input a game\n");
     for(int i=0; i<8; i++)
         for(int j=0; j<8; j++) 
-            scanf("%d", board[i][j]);
+            scanf("%d", &board[i][j]);
     printf("input a coordinate and a color(black = 1; white = 2)\n");
     // char c = '2' or 2 + '0'; (%d)1, (%d)50->(acsii); (%d)1, (%c)2;
     scanf("%d%d%d", &_x, &_y, &_chess);    //靠阿 要記得在變數前加'&', and % 和% 之間不需要逗號...

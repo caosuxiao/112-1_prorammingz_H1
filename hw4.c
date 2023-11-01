@@ -53,7 +53,7 @@ void main(){
     int board[8][8] = {0}; 
     for(int i=0; i<8; i++)
         for(int j=0; j<8; j++)
-            scanf("%d", board[i][j]);
+            scanf("%d", &board[i][j]);
     for(int i=0; i<8; i++)
         for(int j=0; j<8; j++)
             if(IS_EMPTY(board[i][j]))
