@@ -50,13 +50,22 @@ void PrintPosition(){
             printf("(%d, %d) ", _BandW[0][i][0], _BandW[0][i][1]);
 }   //PrintPosition
 void main(){
-    int board[8][8] = {0}; 
-    for(int i=0; i<8; i++)
-        for(int j=0; j<8; j++)
-            scanf("%d", &board[i][j]);
+    int board[8][8] = {{0, 0, 2, 0, 2, 0, 2, 0},
+                       {1, 0, 1, 2, 1 ,2, 0, 0},
+                       {1, 0, 2, 2, 2 ,2, 0, 0},
+                       {1, 2, 1, 1, 1, 1, 0, 0},
+                       {0, 0, 2, 1, 1, 0, 0, 0},
+                       {0, 0, 1, 2, 1, 2, 0, 0},
+                       {0, 0, 0, 0, 2, 0, 0, 0},                                                                                                              
+                       {0, 0, 1, 1, 1, 0, 0, 0}}; //pic1
+    // int board[8][8] = {0}; 
+    // for(int i=0; i<8; i++)
+    //     for(int j=0; j<8; j++)
+    //         scanf("%d", &board[i][j]);
     for(int i=0; i<8; i++)
         for(int j=0; j<8; j++)
             if(IS_EMPTY(board[i][j]))
                 direction(board, i, j);
     PrintPosition();
+    printf("\n(2, 6) can get %d chesses", _BandW[0][22][2]);
 }
