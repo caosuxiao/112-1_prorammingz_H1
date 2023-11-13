@@ -16,7 +16,6 @@ int Direction(int board[8][8], int x, int y, int chess,int flip){
             sum += n;
             if(flip && n > 0){
                 board[x][y] = chess;
-                // printf("ready to flip...\n");
                 Flip(board, x, y, direc[i][0], direc[i][1], n);
             }
         }
@@ -50,7 +49,6 @@ int Most(int board[8][8]){
     for(int i=0; i<64; i++)
         if(_Record[i][2] > max)
             max = _Record[i][2], x = i / 8, y = i % 8;
-    // printf("%d %d (n = %d)\n", x, y, max);
     Direction(board, x, y, 2, 1); 
     return max;    
 }   //Most
@@ -67,13 +65,11 @@ int CheckNext(int board[8][8],int chess){
     return 0;
 }   //CheckNext
 void Flip(int board[8][8], int x, int y,int dx, int dy, int n){
-    // printf("READY dx: %d, dy: %d\n", dx, dy);
     for(int i=1; i<=n; i++){
         if(board[x + i * dx][y + i * dy] == 1)
             board[x + i * dx][y + i * dy] = 2;
         else board[x + i * dx][y + i * dy] = 1;
     }
-    // printf("flipped %d chessmen\n", n);
 }   //Flip
 void PrintBoard(int board[8][8]){
     for(int i=0; i<8; i++){
