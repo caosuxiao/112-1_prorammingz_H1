@@ -16,8 +16,8 @@ int Direction(int board[8][8], int x, int y, int chess,int flip){
             sum += n;
             if(flip && n > 0){
                 board[x][y] = chess;
-                printf("ready to flip...\n");
-                Flip(board, x, y, direc[i][0], direc[i][1], n); //wrong position
+                // printf("ready to flip...\n");
+                Flip(board, x, y, direc[i][0], direc[i][1], n);
             }
         }
     }
@@ -50,7 +50,7 @@ int Most(int board[8][8]){
     for(int i=0; i<64; i++)
         if(_Record[i][2] > max)
             max = _Record[i][2], x = i / 8, y = i % 8;
-    printf("%d %d (n = %d)\n", x, y, max);
+    // printf("%d %d (n = %d)\n", x, y, max);
     Direction(board, x, y, 2, 1); 
     return max;    
 }   //Most
@@ -67,13 +67,13 @@ int CheckNext(int board[8][8],int chess){
     return 0;
 }   //CheckNext
 void Flip(int board[8][8], int x, int y,int dx, int dy, int n){
-    printf("READY dx: %d, dy: %d\n", dx, dy);
+    // printf("READY dx: %d, dy: %d\n", dx, dy);
     for(int i=1; i<=n; i++){
         if(board[x + i * dx][y + i * dy] == 1)
             board[x + i * dx][y + i * dy] = 2;
         else board[x + i * dx][y + i * dy] = 1;
     }
-    printf("flipped %d chessmen\n", n);
+    // printf("flipped %d chessmen\n", n);
 }   //Flip
 void PrintBoard(int board[8][8]){
     for(int i=0; i<8; i++){
@@ -81,7 +81,6 @@ void PrintBoard(int board[8][8]){
             printf("%d ", board[i][j]);
         printf("\n");
     }  
-    // printf("\n");
 }   //PrintBoard
 int CheckBoard(int board[8][8]){
     for(int i=0; i<8; i++)
@@ -102,8 +101,7 @@ void Winner(int board[8][8]){
     else printf("Tie! %d:%d", sumB, sumW);
 }   //Winner
 void main(){
-    int x, y ,chess, round = 1, flagU = -1, flagC = -1, n; /*, user, computer*/ ;
-    char first;
+    int x, y ,chess, round = 1, flagU = -1, flagC = -1, n;
     // int board[8][8] = {{1, 1, 1, 1, 1, 1, 0, 2},
     //                    {1, 1, 1, 1, 1 ,1, 2, 2},
     //                    {1, 1, 2, 1, 2 ,2, 1, 2},
@@ -116,6 +114,7 @@ void main(){
     for(int i=0; i<8; i++)
         for(int j=0; j<8; j++)
             scanf("%d", &board[i][j]);
+    // char first;
     // printf("Do you want to go first?('y' or 'n'; black is first)\n");
     // scanf("%c", &first);
     // if(first == 'y') 
