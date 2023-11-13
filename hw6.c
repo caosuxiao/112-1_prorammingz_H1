@@ -3,8 +3,8 @@
 #define IN_BOARD(x, y) (x >= 0 && x <= 7 && y >= 0 && y <= 7)
 #define IS_EMPTY(x) (x == 0)
 
-// int _RecordW[64][3] = {-1};
-int _BandW[2][64][3] = {-1};
+int _Record[64][3] = {-1};
+// int _User, _Computer, _Record[64][3] = {-1};
 int Direction(int board[8][8], int x, int y, int chess,int flip){
     int sum = 0;  
     int direc[8][2] = {{-1, 0}, {-1, +1}, {0, +1}, {+1, +1},
@@ -21,16 +21,15 @@ int Direction(int board[8][8], int x, int y, int chess,int flip){
             }
         }
     }
-    if(!flip){   
-        if(sum > 0){
-            _BandW[chess - 1][x * 8 + y][0] = x, 
-            _BandW[chess - 1][x * 8 + y][1] = y, 
-            _BandW[chess - 1][x * 8 + y][2] = sum;
-            return 1;
-        }
-        return 0;
-    }
     if(flip) return sum;
+    if(!flip && sum > 0){ 
+        if(chess == 2) 
+            _Record[x * 8 + y][0] = x, 
+            _Record[x * 8 + y][1] = y, 
+            _Record[x * 8 + y][2] = sum;
+        return 1;
+    }
+    return 0;
 }   //Direction
 int YesOrNo(int board[8][8], int chess, int x, int y, int dx, int dy){   //找單一方向
     x = x + dx, y = y + dy;
@@ -43,17 +42,14 @@ int YesOrNo(int board[8][8], int chess, int x, int y, int dx, int dy){   //找�
     else return n;
 }   //YesOrNo
 void ClearAll(){
-    for(int i=0; i<64; i++){
-        _BandW[0][i][0] = _BandW[0][i][1] = _BandW[0][i][2] = -1;
-        _BandW[1][i][0] = _BandW[1][i][1] = _BandW[1][i][2] = -1;
-    }
-        // _RecordW[i][0] = _RecordW[i][1] = _RecordW[i][2] = -1;
+    for(int i=0; i<64; i++)
+        _Record[i][0] = _Record[i][1] = _Record[i][2] = -1;
 }   //ClearAll
 int Most(int board[8][8]){
     int max = 0, x = 0, y = 0;
     for(int i=0; i<64; i++)
-        if(_BandW[1][i][2] > max)
-            max = _BandW[1][i][2], x = i / 8, y = i % 8;
+        if(_Record[i][2] > max)
+            max = _Record[i][2], x = i / 8, y = i % 8;
     printf("%d %d (n = %d)\n", x, y, max);
     Direction(board, x, y, 2, 1); 
     return max;    
@@ -106,32 +102,32 @@ void Winner(int board[8][8]){
     else printf("Tie! %d:%d", sumB, sumW);
 }   //Winner
 void main(){
-    // int board[8][8] = {0};
-    int x, y ,chess, round = 0, user, computer, play = 1;
+    int x, y ,chess, round = 1, flagU = -1, flagC = -1, n; /*, user, computer*/ ;
     char first;
-    int board[8][8] = {{0, 0, 2, 0, 2, 0, 2, 0},
-                       {1, 0, 1, 2, 1 ,2, 0, 0},
-                       {1, 0, 2, 2, 2 ,2, 0, 0},
-                       {1, 2, 1, 1, 1, 1, 0, 0},
-                       {0, 0, 2, 1, 1, 0, 0, 0},
-                       {0, 0, 1, 2, 1, 2, 0, 0},
-                       {0, 0, 0, 0, 2, 0, 0, 0},                                                                                                              
-                       {0, 0, 1, 1, 1, 0, 0, 0}}; //pic1
-    // for(int i=0; i<8; i++)
-    //     for(int j=0; j<8; j++)
-    //         scanf("%d", &board[i][j]);
-    printf("Do you want to go first?('y' or 'n'; black is first)\n");
-    scanf("%c", &first);
-    if(first == 'y') 
-        user = 1, computer = 2, round = 1;  //round & 1 為0就是user time
-    else if(first == 'n') 
-        user = 2, computer = 1;  //round & 1 為0就是user time
-    else return;
-    // !!!attention!!! 要123行到129行的話 chess要改
-    while(play){
-        int flagU = 0, flagC = 0, n;
+    // int board[8][8] = {{1, 1, 1, 1, 1, 1, 0, 2},
+    //                    {1, 1, 1, 1, 1 ,1, 2, 2},
+    //                    {1, 1, 2, 1, 2 ,2, 1, 2},
+    //                    {2, 2, 1, 2, 2, 1, 2, 2},
+    //                    {2, 2, 2, 2, 1, 2, 2, 2},
+    //                    {2, 1, 2, 1, 1, 2, 2, 2},
+    //                    {2, 2, 2, 2, 2, 2, 2, 2},                                                                                                              
+    //                    {2, 2, 2, 2, 2, 2, 2, 2}};
+    int board[8][8] = {0};
+    for(int i=0; i<8; i++)
+        for(int j=0; j<8; j++)
+            scanf("%d", &board[i][j]);
+    // printf("Do you want to go first?('y' or 'n'; black is first)\n");
+    // scanf("%c", &first);
+    // if(first == 'y') 
+    //     _User = 1, _Computer = 2, round = 1;  //round & 1 為0就是user time
+    // else if(first == 'n') 
+    //     _User = 2, _Computer = 1;  //round & 1 為0就是user time
+    // else return;
+    // // !!!attention!!! 要123行到129行的話 chess要改
+    printf("------------------the game starts------------------\n");
+    while(1){
         ClearAll(), PrintBoard(board);
-        if(round & 1){
+        if(round & 1){  //user
             if(CheckNext(board, 1)){
                 printf("your turn: ");
                 scanf("%d %d", &x, &y);
@@ -145,8 +141,8 @@ void main(){
                 printf("U can't move\n");
                 flagU = round;
             } 
-        }   //user time
-        else{
+        }
+        else{   //computer
             if(CheckNext(board,2)){
                 printf("Computer's turn: ");
                 n = Most(board);
@@ -156,12 +152,14 @@ void main(){
                 printf("Computer can't move\n");
                 flagC = round;
             } 
-        }   //computer time
+        }
         round++;
         if(abs(flagC - flagU) == 1 || !CheckBoard(board)){
-            printf("The game ends\n");
+            PrintBoard(board);
+            printf("-------------------the game ends-------------------\n");
             break;
         }
     }
     Winner(board);
+    return ;
 }
