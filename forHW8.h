@@ -14,6 +14,8 @@ typedef struct stack{
     int top;
 } stack_t;
 
+void Init(stack_t * stack);
+int IsEmpty(stack_t * stack);
 pos_t Pop(stack_t * stack);
 void Push(stack_t * stack, pos_t elem);
 

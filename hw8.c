@@ -4,7 +4,19 @@
 
 #define IN_BOARD(x, y) (x >= 0 && x < MAX && y >= 0 && y < MAX)
 
-int maze[MAX][MAX] ={
+// int maze[MAX][MAX] ={    //斷掉
+//   { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+//   { 0, 0, 0, 1, 1, 0, 1, 1, 0, 1 },
+//   { 1, 0, 1, 1, 0, 0, 0, 0, 0, 1 },
+//   { 1, 0, 0, 0, 0, 1, 0, 1, 0, 1 },
+//   { 1, 1, 1, 0, 1, 1, 0, 1, 1, 1 },
+//   { 1, 0, 1, 1, 1, 0, 0, 1, 0, 1 },
+//   { 1, 0, 0, 0, 0, 0, 1, 1, 0, 0 },
+//   { 1, 0, 1, 1, 1, 1, 1, 0, 0, 1 },
+//   { 1, 0, 0, 0, 1, 0, 0, 0, 1, 1 },
+//   { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }};
+
+int maze[MAX][MAX] ={    //接得起來
   { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
   { 0, 0, 0, 1, 1, 0, 1, 1, 0, 1 },
   { 1, 0, 1, 1, 0, 0, 0, 0, 0, 1 },
@@ -13,7 +25,7 @@ int maze[MAX][MAX] ={
   { 1, 0, 1, 1, 1, 0, 0, 1, 0, 1 },
   { 1, 0, 0, 0, 0, 0, 1, 1, 0, 0 },
   { 1, 0, 1, 1, 1, 1, 1, 0, 0, 1 },
-  { 1, 0, 0, 0, 1, 0, 0, 0, 1, 1 },
+  { 1, 0, 0, 0, 0, 0, 0, 0, 1, 1 },
   { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }};
 
 pos_t InAndOut(pos_t * exit){
@@ -53,7 +65,7 @@ pos_t InAndOut(pos_t * exit){
 }
 
 void Direction(pos_t target, stack_t * stack){
-    int direc[4][2] = {{-1, 0}, {0, 1}, (1, 0), {0, -1}};
+    int direc[4][2] = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
     for(int i=0; i<4; i++){
         int x = target.x + direc[i][0], y = target.y + direc[i][1];
         if(IN_BOARD(x, y) && maze[x][y] == 0){
@@ -68,28 +80,54 @@ void Direction(pos_t target, stack_t * stack){
 pos_t Move(stack_t * stack){
     pos_t temp = Pop(stack);
     // Pop(stack)-> 沒有東西接還可以獲取成員嗎？
-    while(temp.x == -1 || temp.y == -1)
-        temp = Pop(stack);
+    if(temp.x == -1 && temp.y == -1)
+        return temp;
+    printf("now: (%d, %d)\n", temp.x, temp.y);
     return temp;
 }
 
+void PassBy(pos_t mouse){
+    maze[mouse.x][mouse.y] = 7;
+}
+
+void PrintMaze(pos_t * ent, pos_t * exit){
+    for(int i=0; i<MAX; i++){
+        for(int j=0; j<MAX; j++){
+            if(i == ent->x && j == ent->y){
+                if(i == 0) printf("vv");
+                else if(i == MAX - 1) printf("^^");
+                else if(j == 0) printf("->");
+                else if(j == MAX - 1) printf("<-");
+            }
+            else if(i == exit->x && j == exit->y) printf("!!");
+            else if(maze[i][j] == 7)
+                printf(" .");
+            else printf("  ");
+        }
+        printf("\n");
+    }
+}
+
 void main(){
+    pos_t ent, mouse;
     pos_t * exit = (pos_t *)malloc(sizeof(pos_t));
     stack_t * stack = (stack_t *)malloc(sizeof(stack_t));
-    printf("I'm hereA.\n");
-    pos_t mouse = InAndOut(exit);
-    printf("I'm hereB.\n");
-    int i = 0;
-    printf("I'm hereC.\n");
-    while (mouse.x != exit->x && mouse.y != exit->y){
+    Init(stack);
+    ent = mouse = InAndOut(exit);
+    printf("Starts from: (%d, %d)\n", mouse.x, mouse.y);
+    while (!(mouse.x == exit->x && mouse.y == exit->y)){
+        PassBy(mouse);
         Direction(mouse, stack);
         mouse = Move(stack);
-        printf("This is %d\n", i);
-        i++; 
-    }
-    printf("I'm hereD.\n");
+        if(mouse.x == -1 && mouse.y == -1) break;
+    }   // 已經empty了且也互不等於為什麼還會進去
+    if(mouse.x == exit->x && mouse.y == exit->y)
+        printf("finds the exit.\n");
+    else
+        printf("doesn't find the exit.\n");
+    printf("Ends at: (%d, %d)\n", exit->x, exit->y);
+    PrintMaze(&ent, exit);
     free(exit), free(stack);
-    printf("I'm hereE.\n");
-    // 沒加malloc也沒提醒?
+    // 77, 78沒加malloc也沒提醒?
     return ;
 }
